@@ -11,7 +11,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://your-frontend-domain.amplifyapp.com",
+      "https://main.d1u7utdtv6yhxu.amplifyapp.com/",
       "https://www.yourdomain.com"
     ],
     methods: ["GET", "POST"],
