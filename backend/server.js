@@ -11,8 +11,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://main.d1u7utdtv6yhxu.amplifyapp.com",
-      "https://www.yourdomain.com"
+      "https://www.guardiansoftomorrowinc.org",
+      "https://guardiansoftomorrowinc.org"
     ],
     methods: ["GET", "POST"],
     credentials: false
