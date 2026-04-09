@@ -22,11 +22,53 @@ export function ContactPage() {
     }));
   }, []);
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   // Handle form submission
-  // Runs when user clicks "Submit" button
-  // Sends form data to backend API
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const trimmedData = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      subject: formData.subject.trim(),
+      message: formData.message.trim(),
+    };
+
+    if (
+      !trimmedData.name ||
+      !trimmedData.email ||
+      !trimmedData.subject ||
+      !trimmedData.message
+    ) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    if (!emailRegex.test(trimmedData.email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    if (trimmedData.name.length > 100) {
+      alert("Name is too long.");
+      return;
+    }
+
+    if (trimmedData.email.length > 254) {
+      alert("Email is too long.");
+      return;
+    }
+
+    if (trimmedData.subject.length > 150) {
+      alert("Subject is too long.");
+      return;
+    }
+
+    if (trimmedData.message.length > 2000) {
+      alert("Message is too long.");
+      return;
+    }
 
     try {
       const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -36,13 +78,13 @@ export function ContactPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(trimmedData),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         console.error("Error from server:", data);
-        alert("Something went wrong sending your message.");
+        alert(data.error || "Something went wrong sending your message.");
         return;
       }
 
@@ -63,7 +105,7 @@ export function ContactPage() {
     }
   };
 
-  // Handle input changes, when user types in form fields
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -108,7 +150,6 @@ export function ContactPage() {
 
         {/* Contact Information Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          {/* Hours */}
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border border-slate-700/50 shadow-2xl text-center hover:border-blue-400/50 transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Clock className="w-8 h-8 text-white" />
@@ -133,7 +174,6 @@ export function ContactPage() {
             </p>
           </div>
 
-          {/* Phone */}
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border border-slate-700/50 shadow-2xl text-center hover:border-purple-400/50 transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Phone className="w-8 h-8 text-white" />
@@ -158,7 +198,6 @@ export function ContactPage() {
             </p>
           </div>
 
-          {/* Email */}
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border border-slate-700/50 shadow-2xl text-center hover:border-blue-400/50 transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
               <Mail className="w-8 h-8 text-white" />
@@ -177,7 +216,6 @@ export function ContactPage() {
             </p>
           </div>
 
-          {/* Address */}
           <div className="bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border border-slate-700/50 shadow-2xl text-center hover:border-purple-400/50 transition-all duration-300">
             <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center">
               <MapPin className="w-8 h-8 text-white" />
@@ -208,7 +246,7 @@ export function ContactPage() {
             </p>
           </div>
         </div>
-        
+
         {/* Text Messaging Consent (tied to phone contact) */}
         <div className="max-w-4xl mx-auto -mt-10 mb-20">
           <div className="bg-slate-900/40 backdrop-blur-md rounded-2xl p-6 border border-slate-700/40 text-center">
@@ -251,7 +289,6 @@ export function ContactPage() {
               onSubmit={handleSubmit}
               className="max-w-3xl mx-auto space-y-6"
             >
-              {/* Name and Email */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <input
@@ -279,7 +316,6 @@ export function ContactPage() {
                 </div>
               </div>
 
-              {/* Subject */}
               <div>
                 <input
                   type="text"
@@ -293,7 +329,6 @@ export function ContactPage() {
                 />
               </div>
 
-              {/* Message */}
               <div>
                 <textarea
                   name="message"
@@ -307,7 +342,6 @@ export function ContactPage() {
                 />
               </div>
 
-              {/* Submit Button */}
               <div className="pt-4">
                 <button
                   type="submit"
@@ -325,7 +359,6 @@ export function ContactPage() {
           </div>
         </section>
 
-        {/* Privacy Policy Section */}
         <section className="mb-16">
           <div className="bg-slate-900/50 backdrop-blur-md rounded-3xl p-10 md:p-12 border border-slate-700/50 shadow-2xl">
             <h2
@@ -402,7 +435,6 @@ export function ContactPage() {
           </div>
         </section>
 
-        {/* Footer */}
         <div
           className="text-center text-slate-500 pb-8"
           style={{ fontSize: "0.875rem", fontWeight: 300 }}
